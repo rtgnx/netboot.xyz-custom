@@ -1,12 +1,25 @@
 #!ipxe
 ###
-### netboot.xyz-custom menu
+### netboot.xyz-custom menu example
 ###
 
-:start
-echo Hello world!
-sleep 10
+:custom
+clear custom_choice
+menu This is a Test Menu
+item --gap This is the first sub menu
+item aarch64_glibc ${space} Loading a kernel and initrd
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
 goto custom_exit
 
+:aarch64_glibc
+# root https://repo-default.voidlinux.org/live/current/void-aarch64-ROOTFS-20230628.tar.xz
+kernel https://raw.githubusercontent.com/rtgnx/netboot.xyz-custom/master/vmlinuz
+initrd https://raw.githubusercontent.com/rtgnx/netboot.xyz-custom/master/initramfs.img
+imgargs vmlinuz boot=live config fetch=https://raw.githubusercontent.com/rtgnx/netboot.xyz-custom/master/rootfs.squashfs
+boot || goto custom_exit
+
 :custom_exit
-exit 0
+chain utils.ipxe
+exit
