@@ -7,16 +7,16 @@
 clear custom_choice
 menu Void Linux Netboot.xyz
 item --gap This is the first sub menu
-item aarch64_glibc ${space} AARCH64 GLIBC
+item x86_glibc ${space} Void X86 GLIBC
 choose custom_choice || goto custom_exit
 echo ${cls}
 goto ${custom_choice}
 goto custom_exit
 
-:aarch64_glibc
-kernel https://raw.githubusercontent.com/rtgnx/netboot.xyz-custom/master/vmlinuz
-initrd https://raw.githubusercontent.com/rtgnx/netboot.xyz-custom/master/initramfs.img
-imgargs vmlinuz boot=live config fetch=https://rtgnx.s3.nl-ams.scw.cloud/rootfs.squashfs
+:x86_glibc
+kernel https://rtgnx.s3.nl-ams.scw.cloud/netboot/x86/vmlinuz
+initrd https://rtgnx.s3.nl-ams.scw.cloud/netboot/x86/initramfs.img
+imgargs vmlinuz boot=live config fetch=https://rtgnx.s3.nl-ams.scw.cloud/netboot/x86/rootfs.squashfs
 boot || goto custom_exit
 
 :custom_exit

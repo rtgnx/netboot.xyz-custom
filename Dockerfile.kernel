@@ -1,0 +1,14 @@
+FROM ghcr.io/void-linux/void-glibc-full:latest as build
+
+RUN xbps-install -Syu xbps && xbps-install -Syu
+RUN xbps-install -Sy linux
+
+## Strip versions from file name
+RUN ls /boot/
+RUN mv /boot/vmlinuz* /boot/vmlinuz
+RUN mv /boot/initramfs*.img /boot/initramfs.img
+
+FROM scratch
+
+COPY --from=build /boot/vmlinuz /vmlinuz
+COPY --from=build /boot/initramfs.img /initramfs.img

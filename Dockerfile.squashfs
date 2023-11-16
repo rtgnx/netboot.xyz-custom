@@ -1,0 +1,17 @@
+FROM ghcr.io/void-linux/void-glibc-full:latest as rootfs
+
+RUN xbps-install -Syu xbps && xbps-install -Syu
+RUN xbps-install -Sy bash
+
+
+
+
+FROM ghcr.io/void-linux/void-glibc-full:latest as squashfs
+RUN xbps-install -Sy squashfs-tools base-devel
+RUN mkdir -p /newroot
+COPY --from=rootfs / /newroot/
+RUN mksquashfs /newroot /rootfs.squashfs -info -processors 1 -noappend -comp xz -Xdict-size 100%
+
+
+FROM scratch
+COPY --from=squashfs /rootfs.squashfs /
